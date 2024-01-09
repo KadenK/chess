@@ -1,0 +1,1 @@
+This repository will be used to store my code and track my progress in my CS 240 Advanced Software Construction class as I develop code for a fully functioning chess application.
