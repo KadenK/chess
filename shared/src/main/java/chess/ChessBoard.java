@@ -12,12 +12,10 @@ import static chess.ChessPiece.PieceType;
  */
 public class ChessBoard {
 
-    private final int boardRowCount = 8;
-    private final int boardColumnCount = 8;
     private ChessPiece[][] boardLayout;
 
     public ChessBoard() {
-        boardLayout = new ChessPiece[boardColumnCount][boardRowCount];
+        boardLayout = new ChessPiece[8][8];
     }
 
     /**
@@ -27,7 +25,8 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        boardLayout[position.getRow()][position.getColumn()] = piece;
+        //Subtract one to account for rows/columns starting at 1, rather than 0 like arrays.
+        boardLayout[position.getColumn()-1][position.getRow()-1] = piece;
     }
 
     /**
@@ -38,12 +37,8 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        if (boardLayout[position.getRow()][position.getColumn()] != null) {
-            return boardLayout[position.getRow()][position.getColumn()];
-        }
-        else {
-            return null;
-        }
+        //Subtract one to account for rows/columns starting at 1, rather than 0 like arrays.
+        return boardLayout[position.getColumn()-1][position.getRow()-1];
     }
 
     /**
@@ -52,33 +47,45 @@ public class ChessBoard {
      */
     public void resetBoard() {
         // Make a new, empty board
-        boardLayout = new ChessPiece[boardColumnCount][boardRowCount];
+        boardLayout = new ChessPiece[8][8];
 
         //Start creating the white pieces
-        boardLayout[0][0] = new ChessPiece(TeamColor.WHITE, PieceType.ROOK);
-        boardLayout[1][0] = new ChessPiece(TeamColor.WHITE, PieceType.KNIGHT);
-        boardLayout[2][0] = new ChessPiece(TeamColor.WHITE, PieceType.BISHOP);
-        boardLayout[3][0] = new ChessPiece(TeamColor.WHITE, PieceType.QUEEN);
-        boardLayout[4][0] = new ChessPiece(TeamColor.WHITE, PieceType.KING);
-        boardLayout[5][0] = new ChessPiece(TeamColor.WHITE, PieceType.BISHOP);
-        boardLayout[6][0] = new ChessPiece(TeamColor.WHITE, PieceType.KNIGHT);
-        boardLayout[7][0] = new ChessPiece(TeamColor.WHITE, PieceType.ROOK);
-        for (int i = 0; i < boardColumnCount; i++) {
-            boardLayout[i][1] = new ChessPiece(TeamColor.WHITE, PieceType.PAWN);
+        addPiece(new ChessPosition(1,1), new ChessPiece(TeamColor.WHITE, PieceType.ROOK));
+        addPiece(new ChessPosition(2,1), new ChessPiece(TeamColor.WHITE, PieceType.KNIGHT));
+        addPiece(new ChessPosition(3,1), new ChessPiece(TeamColor.WHITE, PieceType.BISHOP));
+        addPiece(new ChessPosition(4,1), new ChessPiece(TeamColor.WHITE, PieceType.QUEEN));
+        addPiece(new ChessPosition(5,1), new ChessPiece(TeamColor.WHITE, PieceType.KING));
+        addPiece(new ChessPosition(6,1), new ChessPiece(TeamColor.WHITE, PieceType.BISHOP));
+        addPiece(new ChessPosition(7,1), new ChessPiece(TeamColor.WHITE, PieceType.KNIGHT));
+        addPiece(new ChessPosition(8,1), new ChessPiece(TeamColor.WHITE, PieceType.ROOK));
+        for (int i = 1; i <= 8; i++) {
+            addPiece(new ChessPosition(i,2), new ChessPiece(TeamColor.WHITE, PieceType.PAWN));
         }
 
         //Start creating the black pieces
-        boardLayout[0][7] = new ChessPiece(TeamColor.BLACK, PieceType.ROOK);
-        boardLayout[1][7] = new ChessPiece(TeamColor.BLACK, PieceType.KNIGHT);
-        boardLayout[2][7] = new ChessPiece(TeamColor.BLACK, PieceType.BISHOP);
-        boardLayout[3][7] = new ChessPiece(TeamColor.BLACK, PieceType.QUEEN);
-        boardLayout[4][7] = new ChessPiece(TeamColor.BLACK, PieceType.KING);
-        boardLayout[5][7] = new ChessPiece(TeamColor.BLACK, PieceType.BISHOP);
-        boardLayout[6][7] = new ChessPiece(TeamColor.BLACK, PieceType.KNIGHT);
-        boardLayout[7][7] = new ChessPiece(TeamColor.BLACK, PieceType.ROOK);
-        for (int i = 0; i < boardColumnCount; i++) {
-            boardLayout[i][6] = new ChessPiece(TeamColor.BLACK, PieceType.PAWN);
+        addPiece(new ChessPosition(1,7), new ChessPiece(TeamColor.BLACK, PieceType.ROOK));
+        addPiece(new ChessPosition(2,7), new ChessPiece(TeamColor.BLACK, PieceType.KNIGHT));
+        addPiece(new ChessPosition(3,7), new ChessPiece(TeamColor.BLACK, PieceType.BISHOP));
+        addPiece(new ChessPosition(4,7), new ChessPiece(TeamColor.BLACK, PieceType.QUEEN));
+        addPiece(new ChessPosition(5,7), new ChessPiece(TeamColor.BLACK, PieceType.KING));
+        addPiece(new ChessPosition(6,7), new ChessPiece(TeamColor.BLACK, PieceType.BISHOP));
+        addPiece(new ChessPosition(7,7), new ChessPiece(TeamColor.BLACK, PieceType.KNIGHT));
+        addPiece(new ChessPosition(8,7), new ChessPiece(TeamColor.BLACK, PieceType.ROOK));
+        for (int i = 1; i <= 8; i++) {
+            addPiece(new ChessPosition(i,8), new ChessPiece(TeamColor.BLACK, PieceType.PAWN));
         }
 
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder output = new StringBuilder();
+        for (int y = 7; y >= 0; y--) {
+            for (int x = 0; x <= 7; x++) {
+                output.append("|").append(boardLayout[x][y] != null ? boardLayout[x][y].toString() : " ");
+            }
+            output.append("|\n");
+        }
+        return output.toString();
     }
 }
