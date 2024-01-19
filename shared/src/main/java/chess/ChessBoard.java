@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.Arrays;
+
 import static chess.ChessGame.TeamColor;
 import static chess.ChessPiece.PieceType;
 
@@ -42,6 +44,29 @@ public class ChessBoard {
     }
 
     /**
+     * Checks to see if the position given is occupied
+     *
+     * @param board the current game board to check
+     * @param position the position to check on the board
+     * @return boolean stating if the position is valid
+     */
+    private boolean isOccupied(ChessBoard board, ChessPosition position) {
+
+        return board.getPiece(position) != null;
+    }
+
+    /**
+     * Returns the Team Color of the piece at the given square, if no piece present, returns null
+     *
+     * @param position the position to check on the board
+     * @return ChessGame.TeamColor the color of the piece on the square
+     */
+    public ChessGame.TeamColor getTeamOfSquare(ChessPosition position) {
+        ChessPiece pieceAtLocation = getPiece(position);
+        return pieceAtLocation != null ? pieceAtLocation.getTeamColor() : null;
+    }
+
+    /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
      */
@@ -75,6 +100,19 @@ public class ChessBoard {
             addPiece(new ChessPosition(i,8), new ChessPiece(TeamColor.BLACK, PieceType.PAWN));
         }
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessBoard that = (ChessBoard) o;
+        return Arrays.deepEquals(boardLayout, that.boardLayout);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(boardLayout);
     }
 
     @Override

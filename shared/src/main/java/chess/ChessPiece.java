@@ -1,5 +1,7 @@
 package chess;
 
+import chess.MoveCalculators.KingMoveCalculator;
+
 import java.util.*;
 
 /**
@@ -55,7 +57,7 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition currPos) {
         return switch (pieceType) {
-            case KING -> getKingMoves(board, currPos);
+            case KING -> KingMoveCalculator.getMoves(board, currPos);
             case QUEEN -> null;
             case BISHOP -> null;
             case KNIGHT -> null;
@@ -75,54 +77,6 @@ public class ChessPiece {
                 position.getColumn() >= 1 && position.getColumn() <= 8);
     }
 
-    /**
-     * Checks to see if the position given is occupied
-     *
-     * @param board the current game board to check
-     * @param position the position to check on the board
-     * @return boolean stating if the position is valid
-     */
-    private boolean isOccupied(ChessBoard board, ChessPosition position) {
-        return board.getPiece(position) != null;
-    }
-
-    /**
-     * Checks to see if the position given is occupied by a team piece
-     *
-     * @param board the current game board to check
-     * @param position the position to check on the board
-     * @return boolean stating if the position is valid
-     */
-    private boolean isOccupiedByTeam(ChessBoard board, ChessPosition position) {
-        ChessPiece pieceAtLocation = board.getPiece(position);
-        return pieceAtLocation != null && pieceAtLocation.getTeamColor() == teamColor;
-    }
-
-    /**
-     * Checks to see if the position given is occupied by a team piece
-     *
-     * @param board the current game board to check
-     * @param position the position to check on the board
-     * @return boolean stating if the position is valid
-     */
-    private boolean isOccupiedByEnemy(ChessBoard board, ChessPosition position) {
-        ChessPiece pieceAtLocation = board.getPiece(position);
-        return pieceAtLocation != null && pieceAtLocation.getTeamColor() != teamColor;
-    }
-
-    private HashSet<ChessMove> getKingMoves(ChessBoard board, ChessPosition currPos) {
-        HashSet<ChessMove> moves = HashSet.newHashSet(8);
-        int currX = currPos.getColumn();
-        int currY = currPos.getRow();
-        Integer[][] relativeMoves = {{-1, 1}, {0, 1}, {1, 1}, {-1, 0}, {1, 0}, {-1, -1}, {0, -1}, {1, -1}};
-        for (Integer[] relativeMove : relativeMoves) {
-            ChessPosition possiblePosition = new ChessPosition(currY + relativeMove[1], currX + relativeMove[0]);
-            if (isValidSquare(possiblePosition) && !isOccupiedByTeam(board, possiblePosition)){
-                moves.add(new ChessMove(currPos, possiblePosition, null));
-            }
-        }
-        return moves;
-    }
 
     @Override
     public String toString() {
