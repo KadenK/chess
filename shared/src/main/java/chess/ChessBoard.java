@@ -46,13 +46,12 @@ public class ChessBoard {
     /**
      * Checks to see if the position given is occupied
      *
-     * @param board the current game board to check
      * @param position the position to check on the board
      * @return boolean stating if the position is valid
      */
-    private boolean isOccupied(ChessBoard board, ChessPosition position) {
+    public boolean isOccupied(ChessPosition position) {
 
-        return board.getPiece(position) != null;
+        return getPiece(position) != null;
     }
 
     /**

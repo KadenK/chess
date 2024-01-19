@@ -1,6 +1,8 @@
 package chess;
 
+import chess.MoveCalculators.BishopMoveCalculator;
 import chess.MoveCalculators.KingMoveCalculator;
+import chess.MoveCalculators.KnightMoveCalculator;
 
 import java.util.*;
 
@@ -59,24 +61,12 @@ public class ChessPiece {
         return switch (pieceType) {
             case KING -> KingMoveCalculator.getMoves(board, currPos);
             case QUEEN -> null;
-            case BISHOP -> null;
-            case KNIGHT -> null;
+            case BISHOP -> BishopMoveCalculator.getMoves(board, currPos);
+            case KNIGHT -> KnightMoveCalculator.getMoves(board, currPos);
             case ROOK -> null;
             case PAWN -> null;
         };
     }
-
-    /**
-     * Checks to see if the position given is a valid square on the board
-     *
-     * @param position the position to check on the board
-     * @return boolean stating if the position is valid
-     */
-    private boolean isValidSquare(ChessPosition position) {
-        return (position.getRow() >= 1 && position.getRow() <= 8 &&
-                position.getColumn() >= 1 && position.getColumn() <= 8);
-    }
-
 
     @Override
     public String toString() {
