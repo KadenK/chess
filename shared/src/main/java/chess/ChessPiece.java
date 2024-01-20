@@ -61,7 +61,7 @@ public class ChessPiece {
             case QUEEN -> QueenMoveCalculator.getMoves(board, currPos);
             case BISHOP -> BishopMoveCalculator.getMoves(board, currPos);
             case KNIGHT -> KnightMoveCalculator.getMoves(board, currPos);
-            case ROOK -> null;
+            case ROOK -> RookMoveCalculator.getMoves(board, currPos);
             case PAWN -> PawnMoveCalculator.getMoves(board, currPos);
         };
     }
