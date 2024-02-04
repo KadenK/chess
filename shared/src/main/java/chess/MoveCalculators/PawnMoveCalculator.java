@@ -1,47 +1,55 @@
 package chess.MoveCalculators;
 
 import chess.*;
-import chess.ChessPiece.PieceType;
 
 import java.util.HashSet;
 
 public class PawnMoveCalculator implements MoveCalculator {
 
-    public static HashSet<ChessMove> getMoves(ChessBoard board, ChessPosition currPos) {
-        HashSet<ChessMove> moves = HashSet.newHashSet(12); //12 is the max possible number of moves for a pawn, counting promotions
-        int currX = currPos.getColumn();
-        int currY = currPos.getRow();
-        ChessGame.TeamColor team = board.getTeamOfSquare(currPos);
+    public static HashSet<ChessMove> getMoves(ChessBoard board, ChessPosition currPosition) {
+        HashSet<ChessMove> moves = HashSet.newHashSet(16); //16 is the max number of moves of a Pawn
+        int currX = currPosition.getColumn();
+        int currY = currPosition.getRow();
+        ChessPiece.PieceType[] promotionPieces = new ChessPiece.PieceType[]{null};
 
-        //Determine promotion facts
-        boolean promotion = (team == ChessGame.TeamColor.WHITE && currY == 7) | (team == ChessGame.TeamColor.BLACK && currY == 2);
-        PieceType[] promotionPieces = promotion ? new PieceType[]{PieceType.BISHOP, PieceType.KNIGHT, PieceType.QUEEN, PieceType.ROOK} : new PieceType[]{null};
+        ChessGame.TeamColor team = board.getTeamOfSquare(currPosition);
+        int moveIncrement = team == ChessGame.TeamColor.WHITE ? 1 : -1;
 
-        // Generate all three potential positions
-        int yIncrement = team == ChessGame.TeamColor.WHITE ? 1 : -1;
-        ChessPosition forward = new ChessPosition(currY + yIncrement, currX);
-        ChessPosition leftAttack = new ChessPosition(currY + yIncrement, currX - 1);
-        ChessPosition rightAttack = new ChessPosition(currY + yIncrement, currX + 1);
-
-        //Generate all potential moves
-        for (PieceType promotionPiece : promotionPieces) {
-            if (MoveCalculator.isValidSquare(forward) && !board.isOccupied(forward)) {
-                moves.add(new ChessMove(currPos, forward, promotionPiece));
-            }
-            if (MoveCalculator.isValidSquare(leftAttack) && (board.getTeamOfSquare(leftAttack) != team && board.getTeamOfSquare(leftAttack) != null)) {
-                moves.add(new ChessMove(currPos, leftAttack, promotionPiece));
-            }
-            if (MoveCalculator.isValidSquare(rightAttack) && (board.getTeamOfSquare(rightAttack) != team && board.getTeamOfSquare(rightAttack) != null)) {
-                moves.add(new ChessMove(currPos, rightAttack, promotionPiece));
-            }
+        boolean promote = (team == ChessGame.TeamColor.WHITE && currY == 7) || (team == ChessGame.TeamColor.BLACK && currY == 2);
+        if (promote) {
+            promotionPieces = new ChessPiece.PieceType[]{ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.QUEEN};
         }
 
-        //If it is the first move of the pawn
-        if ((currY == 2 && team == ChessGame.TeamColor.WHITE) | (currY == 7 && team == ChessGame.TeamColor.BLACK)) {
-            ChessPosition doubleForward = new ChessPosition(currY + yIncrement * 2, currX);
-            if (MoveCalculator.isValidSquare(doubleForward) && !board.isOccupied(doubleForward) && !board.isOccupied(forward)) {
-                moves.add(new ChessMove(currPos, doubleForward, null));
+        for (ChessPiece.PieceType promotionPiece : promotionPieces) {
+            //Add moving forward, if available
+            ChessPosition forwardPosition = new ChessPosition(currY + moveIncrement, currX);
+            if (MoveCalculator.isValidSquare(forwardPosition) && board.getPiece(forwardPosition) == null) {
+                moves.add(new ChessMove(currPosition, forwardPosition, promotionPiece));
             }
+            //Add left attack, if available
+            ChessPosition leftAttack = new ChessPosition(currY + moveIncrement, currX-1);
+            if (MoveCalculator.isValidSquare(leftAttack) &&
+                    board.getPiece(leftAttack) != null &&
+                    board.getTeamOfSquare(leftAttack) != team) {
+                moves.add(new ChessMove(currPosition, leftAttack, promotionPiece));
+            }
+            //Add right attack, if available
+            ChessPosition rightAttack = new ChessPosition(currY + moveIncrement, currX+1);
+            if (MoveCalculator.isValidSquare(rightAttack) &&
+                    board.getPiece(rightAttack) != null &&
+                    board.getTeamOfSquare(rightAttack) != team) {
+                moves.add(new ChessMove(currPosition, rightAttack, promotionPiece));
+            }
+
+            //Add first move double, if available
+            ChessPosition doubleForwardPosition = new ChessPosition(currY + moveIncrement*2, currX);
+            if (MoveCalculator.isValidSquare(doubleForwardPosition) &&
+                    ((team == ChessGame.TeamColor.WHITE && currY == 2) || (team == ChessGame.TeamColor.BLACK && currY == 7)) &&
+                    board.getPiece(doubleForwardPosition) == null &&
+                    board.getPiece(forwardPosition) == null) {
+                moves.add(new ChessMove(currPosition, doubleForwardPosition, promotionPiece));
+            }
+
         }
 
         return moves;

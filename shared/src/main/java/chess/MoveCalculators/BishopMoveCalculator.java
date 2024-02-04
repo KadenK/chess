@@ -1,6 +1,7 @@
 package chess.MoveCalculators;
 
 import chess.ChessBoard;
+import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPosition;
 
@@ -8,35 +9,39 @@ import java.util.HashSet;
 
 public class BishopMoveCalculator implements MoveCalculator {
 
-    public static HashSet<ChessMove> getMoves(ChessBoard board, ChessPosition currPos) {
-        HashSet<ChessMove> moves = HashSet.newHashSet(13); //13 is the max possible number of moves for a Bishop
-        int currX = currPos.getColumn();
-        int currY = currPos.getRow();
-        Integer[][] relativeMoves = {{-1, 1}, {1, 1}, {-1, -1}, {1, -1}};
-        for (Integer[] relativeMove : relativeMoves) { //Iterate over each direction
+    public static HashSet<ChessMove> getMoves(ChessBoard board, ChessPosition currPosition) {
+        HashSet<ChessMove> moves = HashSet.newHashSet(13); //13 is the max number of moves of a Bishop
+        int currX = currPosition.getColumn();
+        int currY = currPosition.getRow();
+        int[][] moveDirections = {{-1, 1}, {1, 1}, {1, -1}, {-1, -1}};
+
+        ChessGame.TeamColor team = board.getTeamOfSquare(currPosition);
+
+        for (int[] direction : moveDirections) {
             boolean obstructed = false;
             int i = 1;
-            while (!obstructed) { //Iterate in that direction until obstructed
-                ChessPosition possiblePosition = new ChessPosition(currY + (relativeMove[1] * i), currX + (relativeMove[0] * i));
-                //If it is a valid square and open
-                if (MoveCalculator.isValidSquare(possiblePosition) && !board.isOccupied(possiblePosition)) {
-                    moves.add(new ChessMove(currPos, possiblePosition, null));
-                    i++;
-                }
-                //If it is a valid square and an enemy
-                else if (MoveCalculator.isValidSquare(possiblePosition) && board.getTeamOfSquare(possiblePosition) != board.getTeamOfSquare(currPos)) {
-                    moves.add(new ChessMove(currPos, possiblePosition, null));
+            while (!obstructed) {
+                ChessPosition possiblePosition = new ChessPosition(currY + direction[1]*i, currX + direction[0]*i);
+                if (!MoveCalculator.isValidSquare(possiblePosition)) {
                     obstructed = true;
                 }
-                //If it is a valid square and a teammate
-                else if (MoveCalculator.isValidSquare(possiblePosition) && board.getTeamOfSquare(possiblePosition) != board.getTeamOfSquare(currPos)) {
+                else if (board.getPiece(possiblePosition) == null) {
+                    moves.add(new ChessMove(currPosition, possiblePosition, null));
+                }
+                else if (board.getTeamOfSquare(possiblePosition) != team) {
+                    moves.add(new ChessMove(currPosition, possiblePosition, null));
+                    obstructed = true;
+                }
+                else if (board.getTeamOfSquare(possiblePosition) == team) {
                     obstructed = true;
                 }
                 else {
                     obstructed = true;
                 }
+                i++;
             }
         }
+
         return moves;
     }
 

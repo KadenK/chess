@@ -8,12 +8,13 @@ import java.util.HashSet;
 
 public interface MoveCalculator {
 
-    static HashSet<ChessMove> getMoves(ChessBoard board, ChessPosition currPos) {
+    static HashSet<ChessMove> getMoves(ChessBoard board, ChessPosition currPosition) {
         return null;
     }
 
     static boolean isValidSquare(ChessPosition position) {
-        return (position.getRow() >= 1 && position.getRow() <= 8 &&
-                position.getColumn() >= 1 && position.getColumn() <= 8);
+        return (position.getRow() >= 1 && position.getRow() <= 8) &&
+                (position.getColumn() >= 1 && position.getColumn() <= 8);
     }
+
 }

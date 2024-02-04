@@ -2,7 +2,8 @@ package chess;
 
 import chess.MoveCalculators.*;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -12,12 +13,12 @@ import java.util.*;
  */
 public class ChessPiece {
 
-    private final ChessGame.TeamColor teamColor;
-    private final PieceType pieceType;
+    private final ChessGame.TeamColor team;
+    private final PieceType type;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, PieceType type) {
-        teamColor = pieceColor;
-        pieceType = type;
+        this.team = pieceColor;
+        this.type = type;
     }
 
     /**
@@ -36,14 +37,14 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-        return teamColor;
+        return team;
     }
 
     /**
      * @return which type of chess piece this piece is
      */
     public PieceType getPieceType() {
-        return pieceType;
+        return type;
     }
 
     /**
@@ -51,30 +52,28 @@ public class ChessPiece {
      * Does not take into account moves that are illegal due to leaving the king in
      * danger
      *
-     * @param board The current board of the game
-     * @param currPos The chess piece's current position
      * @return Collection of valid moves
      */
-    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition currPos) {
-        return switch (pieceType) {
-            case KING -> KingMoveCalculator.getMoves(board, currPos);
-            case QUEEN -> QueenMoveCalculator.getMoves(board, currPos);
-            case BISHOP -> BishopMoveCalculator.getMoves(board, currPos);
-            case KNIGHT -> KnightMoveCalculator.getMoves(board, currPos);
-            case ROOK -> RookMoveCalculator.getMoves(board, currPos);
-            case PAWN -> PawnMoveCalculator.getMoves(board, currPos);
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        return switch (type) {
+            case KING -> KingMoveCalculator.getMoves(board, myPosition);
+            case QUEEN -> QueenMoveCalculator.getMoves(board, myPosition);
+            case BISHOP -> BishopMoveCalculator.getMoves(board, myPosition);
+            case KNIGHT -> KnightMoveCalculator.getMoves(board, myPosition);
+            case ROOK -> RookMoveCalculator.getMoves(board, myPosition);
+            case PAWN -> PawnMoveCalculator.getMoves(board, myPosition);
         };
     }
 
     @Override
     public String toString() {
-        return switch (pieceType) {
-            case KING -> teamColor == ChessGame.TeamColor.WHITE ? "K" : "k";
-            case QUEEN -> teamColor == ChessGame.TeamColor.WHITE ? "Q" : "q";
-            case BISHOP -> teamColor == ChessGame.TeamColor.WHITE ? "B" : "b";
-            case KNIGHT -> teamColor == ChessGame.TeamColor.WHITE ? "N" : "n";
-            case ROOK -> teamColor == ChessGame.TeamColor.WHITE ? "R" : "r";
-            case PAWN -> teamColor == ChessGame.TeamColor.WHITE ? "P" : "p";
+        return switch (type) {
+            case KING -> team == ChessGame.TeamColor.WHITE ? "K" : "k";
+            case QUEEN -> team == ChessGame.TeamColor.WHITE ? "Q" : "q";
+            case BISHOP -> team == ChessGame.TeamColor.WHITE ? "B" : "b";
+            case KNIGHT -> team == ChessGame.TeamColor.WHITE ? "N" : "n";
+            case ROOK -> team == ChessGame.TeamColor.WHITE ? "R" : "r";
+            case PAWN -> team == ChessGame.TeamColor.WHITE ? "P" : "p";
         };
     }
 
@@ -83,11 +82,11 @@ public class ChessPiece {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChessPiece that = (ChessPiece) o;
-        return teamColor == that.teamColor && pieceType == that.pieceType;
+        return team == that.team && type == that.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(teamColor, pieceType);
+        return Objects.hash(team, type);
     }
 }
