@@ -6,12 +6,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import passoffTests.TestFactory;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import static passoffTests.TestFactory.getNewMove;
-import static passoffTests.TestFactory.getNewPosition;
 
 public class ChessMoveTests {
     private ChessMove original;
@@ -21,11 +19,11 @@ public class ChessMoveTests {
     private ChessMove promoteDifferent;
     @BeforeEach
     public void setUp() {
-        original = getNewMove(getNewPosition(2, 6), getNewPosition(1, 5), null);
-        equal = getNewMove(getNewPosition(2, 6), getNewPosition(1, 5), null);
-        startDifferent = getNewMove(getNewPosition(2, 4), getNewPosition(1, 5), null);
-        endDifferent = getNewMove(getNewPosition(2, 6), getNewPosition(5, 3), null);
-        promoteDifferent = getNewMove(getNewPosition(2, 6), getNewPosition(1, 5),
+        original = TestFactory.getNewMove(TestFactory.getNewPosition(2, 6), TestFactory.getNewPosition(1, 5), null);
+        equal = TestFactory.getNewMove(TestFactory.getNewPosition(2, 6), TestFactory.getNewPosition(1, 5), null);
+        startDifferent = TestFactory.getNewMove(TestFactory.getNewPosition(2, 4), TestFactory.getNewPosition(1, 5), null);
+        endDifferent = TestFactory.getNewMove(TestFactory.getNewPosition(2, 6), TestFactory.getNewPosition(5, 3), null);
+        promoteDifferent = TestFactory.getNewMove(TestFactory.getNewPosition(2, 6), TestFactory.getNewPosition(1, 5),
                 ChessPiece.PieceType.QUEEN);
     }
 
