@@ -1,9 +1,7 @@
 package dataAccess;
 
 import model.AuthData;
-import model.UserData;
 
-import javax.xml.crypto.Data;
 import java.util.HashSet;
 
 public class MemoryAuthDAO implements AuthDAO {
@@ -12,11 +10,6 @@ public class MemoryAuthDAO implements AuthDAO {
 
     public MemoryAuthDAO() {
         db = HashSet.newHashSet(16);
-    }
-
-    @Override
-    public void addAuth(String authToken, String username) {
-        db.add(new AuthData(username, authToken));
     }
 
     @Override

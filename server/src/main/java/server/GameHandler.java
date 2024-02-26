@@ -2,7 +2,6 @@ package server;
 
 import com.google.gson.Gson;
 import dataAccess.DataAccessException;
-import dataAccess.GameDAO;
 import dataAccess.UnauthorizedException;
 import model.GameData;
 import service.GameService;

@@ -1,9 +1,7 @@
 package dataAccess;
 
-import chess.ChessGame;
 import model.GameData;
 
-import javax.swing.text.SimpleAttributeSet;
 import java.util.HashSet;
 
 public class MemoryGameDAO implements GameDAO {
@@ -17,11 +15,6 @@ public class MemoryGameDAO implements GameDAO {
     @Override
     public HashSet<GameData> listGames() {
         return db;
-    }
-
-    @Override
-    public void createGame(int gameID, String whiteUsername, String blackUsername, String gameName, ChessGame game) {
-        db.add(new GameData(gameID, whiteUsername, blackUsername, gameName, game));
     }
 
     @Override

@@ -2,7 +2,6 @@ package dataAccess;
 
 import model.UserData;
 
-import javax.xml.crypto.Data;
 import java.util.HashSet;
 
 public class MemoryUserDAO implements UserDAO {
@@ -21,20 +20,6 @@ public class MemoryUserDAO implements UserDAO {
             }
         }
         throw new DataAccessException("User not found: " + username);
-    }
-
-    @Override
-    public void createUser(String username, String password, String email) throws DataAccessException {
-        try {
-            getUser(username);
-        }
-        catch (DataAccessException e) {
-            db.add(new UserData(username, password, email));
-            return;
-        }
-
-        throw new DataAccessException("User already exists: " + username);
-
     }
 
     @Override
