@@ -23,8 +23,13 @@ public class UserHandler {
             UserData userData = new Gson().fromJson(req.body(), UserData.class);
             AuthData authData = userService.createUser(userData);
 
-            resp.status(200);
-            return new Gson().toJson(authData);
+            if (authData == null) {
+                resp.status(400);
+                return "{ \"message\": \"Error: bad request\" }";
+            } else {
+                resp.status(200);
+                return new Gson().toJson(authData);
+            }
 
         } catch (DataAccessException e) {
             resp.status(403);
@@ -45,13 +50,9 @@ public class UserHandler {
             UserData userData = new Gson().fromJson(req.body(), UserData.class);
             AuthData authData = userService.loginUser(userData);
 
-            if (authData == null) {
-                resp.status(400);
-                return "{ \"message\": \"Error: bad request\" }";
-            } else {
-                resp.status(200);
-                return new Gson().toJson(authData);
-            }
+            resp.status(200);
+            return new Gson().toJson(authData);
+
         } catch (DataAccessException e) {
             resp.status(401);
             return "{ \"message\": \"Error: unauthorized\" }";
