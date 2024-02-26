@@ -16,14 +16,11 @@ public class KingMoveCalculator implements MoveCalculator {
         int[][] relativeMoves = {{-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}};
 
         ChessGame.TeamColor team = board.getTeamOfSquare(currPosition);
-
         for (int[] relativeMove : relativeMoves) {
             ChessPosition possiblePosition = new ChessPosition(currY + relativeMove[1], currX + relativeMove[0]);
-            if (MoveCalculator.isValidSquare(possiblePosition) && board.getTeamOfSquare(possiblePosition) != team) {
+            if (MoveCalculator.isValidSquare(possiblePosition) && board.getTeamOfSquare(possiblePosition) != team)
                 moves.add(new ChessMove(currPosition, possiblePosition, null));
-            }
         }
-
         return moves;
     }
 
