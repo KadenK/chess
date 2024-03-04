@@ -21,7 +21,7 @@ public class Server {
 
     public Server() {
 
-        userDAO = new MemoryUserDAO();
+        userDAO = new SQLUserDAO();
         authDAO = new MemoryAuthDAO();
         gameDAO = new MemoryGameDAO();
 
