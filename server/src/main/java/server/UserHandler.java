@@ -7,6 +7,8 @@ import dataAccess.DataAccessException;
 import dataAccess.UnauthorizedException;
 import model.AuthData;
 import model.UserData;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import service.UserService;
 import spark.Request;
 import spark.Response;
@@ -39,6 +41,7 @@ public class UserHandler {
 
     public Object login(Request req, Response resp) throws UnauthorizedException, BadRequestException {
         UserData userData = new Gson().fromJson(req.body(), UserData.class);
+
         AuthData authData = userService.loginUser(userData);
 
         resp.status(200);

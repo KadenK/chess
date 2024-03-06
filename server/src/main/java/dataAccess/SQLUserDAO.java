@@ -2,6 +2,7 @@ package dataAccess;
 
 import model.UserData;
 import org.eclipse.jetty.server.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.xml.crypto.Data;
 import java.sql.Connection;
@@ -28,7 +29,7 @@ public class SQLUserDAO implements UserDAO {
         }
     }
 
-        @Override
+    @Override
     public UserData getUser(String username) throws DataAccessException {
 
         try (var conn = DatabaseManager.getConnection()) {
@@ -64,7 +65,7 @@ public class SQLUserDAO implements UserDAO {
     @Override
     public boolean authenticateUser(String username, String password) throws DataAccessException {
         UserData user = getUser(username);
-        return user.password().equals(password);
+        return passwordMatches(password, user.password());
     }
 
     @Override
@@ -78,5 +79,15 @@ public class SQLUserDAO implements UserDAO {
         } catch (SQLException | DataAccessException e) {
             return;
         }
+    }
+
+    private String hashPassword(String password) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(password);
+    }
+
+    private boolean passwordMatches(String rawPassword, String hashedPassword) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.matches(rawPassword, hashedPassword);
     }
 }
