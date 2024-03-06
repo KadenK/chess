@@ -8,6 +8,9 @@ import java.sql.SQLException;
 public class SQLAuthDAO implements AuthDAO {
 
     public SQLAuthDAO() {
+        try { DatabaseManager.createDatabase(); } catch (DataAccessException ex) {
+            throw new RuntimeException(ex);
+        }
         try (var conn = DatabaseManager.getConnection()) {
             var createTestTable = """            
                     CREATE TABLE if NOT EXISTS auth (

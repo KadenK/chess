@@ -8,6 +8,9 @@ import java.sql.SQLException;
 public class SQLUserDAO implements UserDAO {
 
     public SQLUserDAO() {
+        try { DatabaseManager.createDatabase(); } catch (DataAccessException ex) {
+            throw new RuntimeException(ex);
+        }
         try (var conn = DatabaseManager.getConnection()) {
             var createTestTable = """            
                     CREATE TABLE if NOT EXISTS user (
