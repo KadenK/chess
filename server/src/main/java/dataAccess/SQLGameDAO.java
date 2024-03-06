@@ -2,7 +2,6 @@ package dataAccess;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
-import model.AuthData;
 import model.GameData;
 
 import java.sql.SQLException;
@@ -12,7 +11,6 @@ public class SQLGameDAO implements GameDAO {
 
     public SQLGameDAO() {
         try (var conn = DatabaseManager.getConnection()) {
-            conn.setCatalog("chess");
             var createTestTable = """            
                     CREATE TABLE if NOT EXISTS game (
                                     gameID INT NOT NULL,
@@ -64,7 +62,6 @@ public class SQLGameDAO implements GameDAO {
                 statement.executeUpdate();
             }
         } catch (SQLException | DataAccessException e) {
-            return;
         }
     }
 
@@ -113,7 +110,6 @@ public class SQLGameDAO implements GameDAO {
                 statement.executeUpdate();
             }
         } catch (SQLException | DataAccessException e) {
-            return;
         }
     }
 
@@ -126,7 +122,6 @@ public class SQLGameDAO implements GameDAO {
                 throw new RuntimeException(e);
             }
         } catch (SQLException | DataAccessException e) {
-            return;
         }
     }
 
