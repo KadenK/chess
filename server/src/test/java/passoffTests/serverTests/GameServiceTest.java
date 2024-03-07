@@ -5,7 +5,6 @@ import dataAccess.*;
 import model.AuthData;
 import model.GameData;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.Assertions.*;
 import service.GameService;
 
 import java.util.HashSet;
@@ -37,7 +36,7 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("Create Valid Game")
-    void createGameTestPositive() throws UnauthorizedException {
+    void createGameTestPositive() throws UnauthorizedException, BadRequestException {
         int gameID1 = gameService.createGame(authData.authToken(), "name");
         Assertions.assertTrue(gameDAO.gameExists(gameID1));
 
@@ -53,7 +52,7 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("Proper List Games")
-    void listGamesTestPositive() throws UnauthorizedException {
+    void listGamesTestPositive() throws UnauthorizedException, BadRequestException {
         int gameID1 = gameService.createGame(authData.authToken(), "name");
         int gameID2 = gameService.createGame(authData.authToken(), "name");
         int gameID3 = gameService.createGame(authData.authToken(), "name");
@@ -86,7 +85,7 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("Improper Join Game")
-    void joinGameTestNegative() throws UnauthorizedException {
+    void joinGameTestNegative() throws UnauthorizedException, BadRequestException {
         int gameID = gameService.createGame(authData.authToken(), "name");
         Assertions.assertThrows(UnauthorizedException.class, () -> gameService.joinGame("badToken", gameID, "WHITE"));
         Assertions.assertThrows(BadRequestException.class, () -> gameService.joinGame(authData.authToken(), 11111, "WHITE"));
@@ -95,7 +94,7 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("Proper Clear DB")
-    void clearTestPositive() throws UnauthorizedException {
+    void clearTestPositive() throws UnauthorizedException, BadRequestException {
         gameService.createGame(authData.authToken(), "name");
         gameService.clear();
         Assertions.assertEquals(gameDAO.listGames(), HashSet.newHashSet(16));
@@ -103,7 +102,7 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("Improper Clear DB")
-    void clearTestNegative() throws UnauthorizedException {
+    void clearTestNegative() throws UnauthorizedException, BadRequestException {
         gameService.createGame(authData.authToken(), "name");
         HashSet<GameData> gameList = gameDAO.listGames();
         gameService.clear();
