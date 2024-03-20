@@ -1,4 +1,6 @@
 import chess.*;
+import client.ServerFacade;
+import ui.PreloginREPL;
 
 public class Main {
     public static void main(String[] args) {
@@ -7,19 +9,25 @@ public class Main {
 
         ServerFacade server = new ServerFacade();
 
-        System.out.println(server.register("username", "password", "email"));
+        PreloginREPL prelogin = new PreloginREPL(server);
+        prelogin.run();
+        System.out.println("Exited");
 
-        System.out.println(server.login("username", "password"));
-
+//        System.out.println(server.register("username", "password", "email"));
+//
+//        System.out.println(server.login("username", "password"));
+//
 //        System.out.println(server.logout());
-
-        System.out.println(server.createGame("game1"));
-
-        System.out.println(server.listGames());
-
-        System.out.println(server.joinGame(7957, "WHITE"));
-
-        System.out.println(server.listGames());
+//
+//        int gameID = server.createGame("game1");
+//
+//        System.out.println(gameID);
+//
+//        System.out.println(server.listGames());
+//
+//        System.out.println(server.joinGame(gameID, "WHITE"));
+//
+//        System.out.println(server.listGames());
 
 
     }
