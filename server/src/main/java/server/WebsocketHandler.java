@@ -72,7 +72,7 @@ public class WebsocketHandler {
 
             ChessGame.TeamColor joiningColor = command.getColorString().equalsIgnoreCase("white") ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
 
-            boolean correctColor = false;
+            boolean correctColor;
             if (joiningColor == ChessGame.TeamColor.WHITE) {
                 correctColor = Objects.equals(game.whiteUsername(), auth.username());
             }

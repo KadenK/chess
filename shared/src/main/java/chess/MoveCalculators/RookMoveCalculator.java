@@ -10,39 +10,13 @@ import java.util.HashSet;
 public class RookMoveCalculator implements MoveCalculator {
 
     public static HashSet<ChessMove> getMoves(ChessBoard board, ChessPosition currPosition) {
-        HashSet<ChessMove> moves = HashSet.newHashSet(14); //14 is the max number of moves of a Rook
         int currX = currPosition.getColumn();
         int currY = currPosition.getRow();
         int[][] moveDirections = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 
         ChessGame.TeamColor team = board.getTeamOfSquare(currPosition);
 
-        for (int[] direction : moveDirections) {
-            boolean obstructed = false;
-            int i = 1;
-            while (!obstructed) {
-                ChessPosition possiblePosition = new ChessPosition(currY + direction[1]*i, currX + direction[0]*i);
-                if (!MoveCalculator.isValidSquare(possiblePosition)) {
-                    obstructed = true;
-                }
-                else if (board.getPiece(possiblePosition) == null) {
-                    moves.add(new ChessMove(currPosition, possiblePosition, null));
-                }
-                else if (board.getTeamOfSquare(possiblePosition) != team) {
-                    moves.add(new ChessMove(currPosition, possiblePosition, null));
-                    obstructed = true;
-                }
-                else if (board.getTeamOfSquare(possiblePosition) == team) {
-                    obstructed = true;
-                }
-                else {
-                    obstructed = true;
-                }
-                i++;
-            }
-        }
-
-        return moves;
+        return MoveCalculator.generateDirectionalMoves(board, currPosition, moveDirections, currY, currX, team);
     }
 
 }
