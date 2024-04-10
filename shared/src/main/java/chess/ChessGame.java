@@ -15,6 +15,8 @@ public class ChessGame {
     private TeamColor teamTurn;
     private ChessBoard board;
 
+    private boolean gameOver;
+
     public ChessGame() {
         board = new ChessBoard();
         setTeamTurn(TeamColor.WHITE);
@@ -192,6 +194,14 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return board;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public boolean getGameOver() {
+        return gameOver;
     }
 
     @Override
