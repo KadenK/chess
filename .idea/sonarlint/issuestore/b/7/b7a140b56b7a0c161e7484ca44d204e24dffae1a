@@ -1,0 +1,14 @@
+
+E	java:S106"+Replace this use of System.out by a logger.(“×·ôþÿÿÿÿ
+h
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(“–ýþ
+P
+java:S18541":Remove this useless assignment to local variable "gameID".(¨ÚÚ 
+A
+java:S14811"+Remove this unused "gameID" local variable.(¨ÚÚ 
+H
+java:S1128"-Remove this unused import 'chess.ChessBoard'.(ØûÚ°úÿÿÿÿ
+B
+java:S1128",Remove this unused import 'chess.ChessGame'.(†¶ØŸ
+J
+java:S1128"/Remove this unused import 'ui.EscapeSequences'.(‰›¯¶üÿÿÿÿ
