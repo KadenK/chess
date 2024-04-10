@@ -71,9 +71,10 @@ public class PostloginREPL {
                     ChessGame.TeamColor color = input[2].equalsIgnoreCase("WHITE") ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
                     if (server.joinGame(joinGame.gameID(), input[2].toUpperCase())) {
                         out.println("You have joined the game");
-                        server.sendWSMessage("Test Join");
                         inGame = true;
-                        GameplayREPL gameplayREPL = new GameplayREPL(server, joinGame.game(), color);
+                        server.connectWS();
+                        server.joinPlayer(joinGame.gameID(), color);
+                        GameplayREPL gameplayREPL = new GameplayREPL(server, joinGame, color);
                         gameplayREPL.run();
                         break;
                     } else {
@@ -104,7 +105,9 @@ public class PostloginREPL {
                     if (server.joinGame(observeGame.gameID(), null)) {
                         out.println("You have joined the game as an observer");
                         inGame = true;
-                        GameplayREPL gameplayREPL = new GameplayREPL(server, observeGame.game(), null);
+                        server.connectWS();
+                        server.joinObserver(observeGame.gameID());
+                        GameplayREPL gameplayREPL = new GameplayREPL(server, observeGame, null);
                         gameplayREPL.run();
                         break;
                     } else {
