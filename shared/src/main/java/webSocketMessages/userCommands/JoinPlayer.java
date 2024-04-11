@@ -18,7 +18,7 @@ public class JoinPlayer extends UserGameCommand {
         return gameID;
     }
 
-    public String getColorString() {
-        return playerColor == ChessGame.TeamColor.WHITE ? "white" : "black";
+    public ChessGame.TeamColor getColor() {
+        return playerColor;
     }
 }

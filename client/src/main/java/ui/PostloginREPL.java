@@ -47,12 +47,15 @@ public class PostloginREPL {
                         printCreate();
                         break;
                     }
+                    server.createGame(input[1]);
                     out.printf("Created game: %s%n", input[1]);
                     break;
                 case "join":
                     handleJoin(input);
+                    break;
                 case "observe":
                     handleObserve(input);
+                    break;
                 default:
                     out.println("Command not recognized, please try again");
                     printHelpMenu();

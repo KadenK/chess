@@ -57,7 +57,7 @@ public class BoardPrinter {
         }
         output.append(RESET_TEXT_BOLD_FAINT);
         out.println(output);
-        out.printf("Turn: %s\n", game.getTeamTurn() == ChessGame.TeamColor.WHITE ? "white" : "black");
+        out.printf("Turn: %s\n", game.getTeamTurn().toString());
     }
 
     private String startingRow(boolean reversed) {

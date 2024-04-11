@@ -39,7 +39,6 @@ public class GameplayREPL {
     public void run() {
         boolean inGame = true;
         out.print(RESET_TEXT_COLOR + RESET_BG_COLOR);
-//        boardPrinter.printBoard(color, null);
         while (inGame) {
             String[] input = getUserInput();
             switch (input[0]) {
@@ -88,7 +87,7 @@ public class GameplayREPL {
     }
 
     private String[] getUserInput() {
-        String prompt = "IN-GAME";//color == null ? "OBSERVING" : color == ChessGame.TeamColor.WHITE ? "WHITE" : "BLACK";
+        String prompt = "IN-GAME";
         out.printf("\n[%s] >>> ", prompt);
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine().split(" ");

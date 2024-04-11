@@ -43,7 +43,11 @@ public class ChessGame {
      */
     public enum TeamColor {
         WHITE,
-        BLACK
+        BLACK;
+
+        public String toString() {
+            return this == WHITE ? "white" : "black";
+        }
     }
 
     /**
