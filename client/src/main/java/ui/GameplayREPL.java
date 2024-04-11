@@ -31,9 +31,9 @@ public class GameplayREPL {
         this.server = server;
         this.game = gameData.game();
         this.gameID = gameData.gameID();
-        this.color = color;
+        GameplayREPL.color = color;
 
-        this.boardPrinter = new BoardPrinter(game);
+        boardPrinter = new BoardPrinter(game);
     }
 
     public void run() {

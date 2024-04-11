@@ -14,6 +14,8 @@ public class PostloginREPL {
     ServerFacade server;
     List<GameData> games;
 
+    boolean inGame;
+
     public PostloginREPL(ServerFacade server) {
         this.server = server;
         games = new ArrayList<>();
@@ -21,7 +23,7 @@ public class PostloginREPL {
 
     public void run() {
         boolean loggedIn = true;
-        boolean inGame = false;
+        inGame = false;
         out.print(RESET_TEXT_COLOR + RESET_BG_COLOR);
         while (loggedIn && !inGame) {
             String[] input = getUserInput();
@@ -48,72 +50,9 @@ public class PostloginREPL {
                     out.printf("Created game: %s%n", input[1]);
                     break;
                 case "join":
-                    if (input.length != 3 || !input[1].matches("\\d") || !input[2].toUpperCase().matches("WHITE|BLACK")) {
-                        out.println("Please provide a game ID and color choice");
-                        printJoin();
-                        break;
-                    }
-                    int gameNum = Integer.parseInt(input[1]);
-                    if (games.isEmpty() || games.size() <= gameNum) {
-                        refreshGames();
-                        if (games.isEmpty()) {
-                            out.println("Error: please first create a game");
-                            break;
-                        }
-                        if (games.size() <= gameNum) {
-                            out.println("Error: that Game ID does not exist");
-                            printGames();
-                            break;
-                        }
-                    }
-                    GameData joinGame = games.get(gameNum);
-                    ChessGame.TeamColor color = input[2].equalsIgnoreCase("WHITE") ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
-                    if (server.joinGame(joinGame.gameID(), input[2].toUpperCase())) {
-                        out.println("You have joined the game");
-                        inGame = true;
-                        server.connectWS();
-                        server.joinPlayer(joinGame.gameID(), color);
-                        GameplayREPL gameplayREPL = new GameplayREPL(server, joinGame, color);
-                        gameplayREPL.run();
-                        break;
-                    } else {
-                        out.println("Game does not exist or color taken");
-                        printJoin();
-                        break;
-                    }
+                    handleJoin(input);
                 case "observe":
-                    if (input.length != 2 || !input[1].matches("\\d")) {
-                        out.println("Please provide a game ID");
-                        printObserve();
-                        break;
-                    }
-                    int gameObservedNum = Integer.parseInt(input[1]);
-                    if (games.isEmpty() || games.size() <= gameObservedNum) {
-                        refreshGames();
-                        if (games.isEmpty()) {
-                            out.println("Error: please first create a game");
-                            break;
-                        }
-                        if (games.size() <= gameObservedNum) {
-                            out.println("Error: that Game ID does not exist");
-                            printGames();
-                            break;
-                        }
-                    }
-                    GameData observeGame = games.get(gameObservedNum);
-                    if (server.joinGame(observeGame.gameID(), null)) {
-                        out.println("You have joined the game as an observer");
-                        inGame = true;
-                        server.connectWS();
-                        server.joinObserver(observeGame.gameID());
-                        GameplayREPL gameplayREPL = new GameplayREPL(server, observeGame, null);
-                        gameplayREPL.run();
-                        break;
-                    } else {
-                        out.println("Game does not exist");
-                        printObserve();
-                        break;
-                    }
+                    handleObserve(input);
                 default:
                     out.println("Command not recognized, please try again");
                     printHelpMenu();
@@ -156,6 +95,75 @@ public class PostloginREPL {
         out.println("logout - log out of current user");
         out.println("quit - stop playing");
         out.println("help - show this menu");
+    }
+
+    private void handleJoin(String[] input) {
+        if (input.length != 3 || !input[1].matches("\\d") || !input[2].toUpperCase().matches("WHITE|BLACK")) {
+            out.println("Please provide a game ID and color choice");
+            printJoin();
+            return;
+        }
+        int gameNum = Integer.parseInt(input[1]);
+        if (games.isEmpty() || games.size() <= gameNum) {
+            refreshGames();
+            if (games.isEmpty()) {
+                out.println("Error: please first create a game");
+                return;
+            }
+            if (games.size() <= gameNum) {
+                out.println("Error: that Game ID does not exist");
+                printGames();
+                return;
+            }
+        }
+        GameData joinGame = games.get(gameNum);
+        ChessGame.TeamColor color = input[2].equalsIgnoreCase("WHITE") ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
+        if (server.joinGame(joinGame.gameID(), input[2].toUpperCase())) {
+            out.println("You have joined the game");
+            inGame = true;
+            server.connectWS();
+            server.joinPlayer(joinGame.gameID(), color);
+            GameplayREPL gameplayREPL = new GameplayREPL(server, joinGame, color);
+            gameplayREPL.run();
+        } else {
+            out.println("Game does not exist or color taken");
+            printJoin();
+        }
+    }
+
+    private void handleObserve(String[] input) {
+        if (input.length != 2 || !input[1].matches("\\d")) {
+            out.println("Please provide a game ID");
+            printObserve();
+            return;
+        }
+        int gameObservedNum = Integer.parseInt(input[1]);
+        if (games.isEmpty() || games.size() <= gameObservedNum) {
+            refreshGames();
+            if (games.isEmpty()) {
+                out.println("Error: please first create a game");
+                return;
+            }
+            if (games.size() <= gameObservedNum) {
+                out.println("Error: that Game ID does not exist");
+                printGames();
+                return;
+            }
+        }
+        GameData observeGame = games.get(gameObservedNum);
+        if (server.joinGame(observeGame.gameID(), null)) {
+            out.println("You have joined the game as an observer");
+            inGame = true;
+            server.connectWS();
+            server.joinObserver(observeGame.gameID());
+            GameplayREPL gameplayREPL = new GameplayREPL(server, observeGame, null);
+            gameplayREPL.run();
+            return;
+        } else {
+            out.println("Game does not exist");
+            printObserve();
+            return;
+        }
     }
 
     private void printCreate() {
