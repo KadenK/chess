@@ -58,7 +58,7 @@ public class WebsocketCommunicator extends Endpoint {
         }
         else if (message.contains("\"serverMessageType\":\"LOAD_GAME\"")) {
             LoadGame loadGame = new Gson().fromJson(message, LoadGame.class);
-            printMoveMade(loadGame.getGame());
+            printLoadedGame(loadGame.getGame());
         }
     }
 
@@ -67,8 +67,8 @@ public class WebsocketCommunicator extends Endpoint {
         System.out.printf("\n%s\n[IN-GAME] >>> ", message);
     }
 
-    private void printMoveMade(ChessGame game) {
-        System.out.print(ERASE_LINE + "\r\nA move has been made\n");
+    private void printLoadedGame(ChessGame game) {
+        System.out.print(ERASE_LINE + "\r\n");
         GameplayREPL.boardPrinter.updateGame(game);
         GameplayREPL.boardPrinter.printBoard(GameplayREPL.color, null);
         System.out.print("[IN-GAME] >>> ");

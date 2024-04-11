@@ -39,7 +39,7 @@ public class GameplayREPL {
     public void run() {
         boolean inGame = true;
         out.print(RESET_TEXT_COLOR + RESET_BG_COLOR);
-        boardPrinter.printBoard(color, null);
+//        boardPrinter.printBoard(color, null);
         while (inGame) {
             String[] input = getUserInput();
             switch (input[0]) {
