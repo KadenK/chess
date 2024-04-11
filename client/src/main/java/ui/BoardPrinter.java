@@ -117,16 +117,6 @@ public class BoardPrinter {
         }
     }
 
-    private ChessPosition reversePosition(ChessPosition pos) {
-        if (pos == null) {
-            return null;
-        }
-        int revRow = (pos.getRow()- 9) * -1;
-        int revCol = (pos.getColumn()- 9) * -1;
-
-        return new ChessPosition(revRow, revCol);
-    }
-
     private String piece(int row, int column) {
         StringBuilder output = new StringBuilder();
         ChessPosition position = new ChessPosition(row, column);
